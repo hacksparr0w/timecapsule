@@ -1,0 +1,19 @@
+[project]
+name = "timecapsule"
+version = "0.1.0"
+description = "A cryptographically secure file format that survives the test of time"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "locki",
+    "pydantic>=2.10.1",
+]
+
+[tool.uv.sources]
+locki = { git = "https://github.com/hacksparr0w/locki.git" }
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.389",
+    "ruff>=0.8.0",
+]
