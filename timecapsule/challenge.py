@@ -104,7 +104,8 @@ def generate_random_key_challenge(
     iv = generate_random_bytes(configuration.cipher.iv_length)
     cipher = build_cipher(
         configuration=configuration.cipher,
-        iv=iv
+        iv=iv,
+        ad=None
     )
 
     return create_key_challenge(
@@ -123,7 +124,8 @@ def generate_random_password_challenge(
     iv = generate_random_bytes(configuration.cipher.iv_length)
     cipher = build_cipher(
         configuration=configuration.cipher,
-        iv=iv
+        iv=iv,
+        ad=None
     )
 
     salt = generate_random_bytes(configuration.key_derivation.salt_length)
