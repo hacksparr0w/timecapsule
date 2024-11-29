@@ -5,6 +5,7 @@ description = "A cryptographically secure file format that survives the test of 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "annotated-types>=0.7.0",
     "locki",
     "pydantic>=2.10.1",
 ]

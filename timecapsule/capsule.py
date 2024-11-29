@@ -1,5 +1,6 @@
-from typing import Any
+from typing import Annotated, Any, Sequence
 
+from annotated_types import MinLen
 from locki.cipher import Cipher
 from locki.lockbox import (
     Lockbox,
@@ -8,8 +9,6 @@ from locki.lockbox import (
     unlock_data as _unlock_data,
     unlock_model as _unlock_model
 )
-
-from pydantic import conlist
 
 from .challenge import Challenge, solve_challenge
 
@@ -26,13 +25,13 @@ __all__ = (
 
 class Capsule[P](Lockbox):
     public: P
-    challenges: conlist(Challenge, min_length=1) # pyright: ignore [reportInvalidTypeForm, reportArgumentType]
+    challenges: Annotated[Sequence[Challenge], MinLen(1)]
 
 
 def lock_data[P](
     *,
     cipher: Cipher,
-    challenges: list[Challenge],
+    challenges: Sequence[Challenge],
     master_key: bytes,
     data: bytes,
     public: P = None
@@ -49,7 +48,7 @@ def lock_data[P](
 def lock_model[P](
     *,
     cipher: Cipher,
-    challenges: list[Challenge],
+    challenges: Sequence[Challenge],
     master_key: bytes,
     model: object,
     public: P = None
@@ -69,6 +68,9 @@ def unlock_data(
     challenge: Challenge,
     secret: bytes
 ) -> bytes:
+    if challenge not in capsule.challenges:
+        raise ValueError("Invalid challenge")
+
     master_key = solve_challenge(challenge=challenge, secret=secret)
 
     return _unlock_data(
@@ -84,6 +86,9 @@ def unlock_model[T](
     challenge: Challenge,
     secret: bytes
 ) -> T:
+    if challenge not in capsule.challenges:
+        raise ValueError("Invalid challenge")
+
     master_key = solve_challenge(challenge=challenge, secret=secret)
 
     return _unlock_model(

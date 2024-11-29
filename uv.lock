@@ -201,6 +201,7 @@ name = "timecapsule"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "annotated-types" },
     { name = "locki" },
     { name = "pydantic" },
 ]
@@ -213,6 +214,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "annotated-types", specifier = ">=0.7.0" },
     { name = "locki", git = "https://github.com/hacksparr0w/locki.git" },
     { name = "pydantic", specifier = ">=2.10.1" },
 ]
