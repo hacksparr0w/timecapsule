@@ -10,7 +10,7 @@ from locki.lockbox import (
     unlock_model as _unlock_model
 )
 
-from .challenge import Challenge, solve_challenge
+from .challenge import Challenge
 
 
 __all__ = (
@@ -62,35 +62,16 @@ def lock_model[P](
     )
 
 
-def unlock_data(
-    *,
-    capsule: Capsule[Any],
-    challenge: Challenge,
-    secret: bytes
-) -> bytes:
-    if challenge not in capsule.challenges:
-        raise ValueError("Invalid challenge")
-
-    master_key = solve_challenge(challenge=challenge, secret=secret)
-
-    return _unlock_data(
-        lockbox=capsule,
-        key=master_key
-    )
+def unlock_data(*, capsule: Capsule[Any], master_key: bytes) -> bytes:
+    return _unlock_data(lockbox=capsule, key=master_key)
 
 
 def unlock_model[T](
     *,
     model_type: type[T],
     capsule: Capsule[Any],
-    challenge: Challenge,
-    secret: bytes
+    master_key: bytes
 ) -> T:
-    if challenge not in capsule.challenges:
-        raise ValueError("Invalid challenge")
-
-    master_key = solve_challenge(challenge=challenge, secret=secret)
-
     return _unlock_model(
         model_type=model_type,
         lockbox=capsule,
